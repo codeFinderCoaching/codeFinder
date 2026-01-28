@@ -1,0 +1,2558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeFinder - Learn to Code! 🚀</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF6B6B;
+            --secondary: #4ECDC4;
+            --accent: #FFE66D;
+            --purple: #A78BFA;
+            --bg-light: #FFF9F0;
+            --bg-card: #FFFFFF;
+            --text-dark: #2D3748;
+            --text-light: #718096;
+            --success: #48BB78;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-light: #1A202C;
+            --bg-card: #2D3748;
+            --text-dark: #F7FAFC;
+            --text-light: #CBD5E0;
+            --shadow: rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            transition: background 0.3s ease;
+        }
+
+        /* NAVIGATION */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--bg-card);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px var(--shadow);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .theme-toggle {
+            background: var(--purple);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(20deg);
+        }
+
+        /* SCREEN CONTAINER */
+        .screen-container {
+            position: relative;
+            margin-top: 80px;
+            min-height: calc(100vh - 80px);
+        }
+
+        .screen {
+            width: 100%;
+            min-height: calc(100vh - 80px);
+            padding: 3rem 2rem;
+            opacity: 0;
+            display: none;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+
+        .screen.active {
+            opacity: 1;
+            display: block;
+            pointer-events: all;
+        }
+
+        .screen.exit-left {
+            opacity: 0;
+            display: none;
+        }
+
+        /* HOME SCREEN */
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--purple), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: slideInDown 0.8s ease;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            animation: fadeIn 1s ease 0.3s both;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeIn 1s ease 0.6s both;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Fredoka', sans-serif;
+            box-shadow: 0 4px 15px var(--shadow);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), #FF8E53);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--secondary), #36D1DC);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px var(--shadow);
+        }
+
+        /* CARDS */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 3rem auto;
+            max-width: 1200px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 25px;
+            box-shadow: 0 8px 30px var(--shadow);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px var(--shadow);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        /* QUIZ */
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .quiz-question {
+            background: var(--bg-card);
+            padding: 3rem;
+            border-radius: 30px;
+            box-shadow: 0 10px 40px var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .quiz-options {
+            display: grid;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .quiz-option {
+            padding: 1.5rem;
+            background: var(--bg-light);
+            border: 3px solid transparent;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--secondary);
+            transform: translateX(10px);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary)15, var(--secondary)15);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: var(--bg-light);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.5s ease;
+        }
+
+        /* BADGES */
+        .badge-container {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        .badge {
+            background: var(--bg-card);
+            padding: 1rem 1.5rem;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 15px var(--shadow);
+            animation: bounceIn 0.6s ease;
+        }
+
+        .badge.locked {
+            opacity: 0.3;
+            filter: grayscale(100%);
+        }
+
+        .badge-icon {
+            font-size: 2rem;
+        }
+
+        /* CODE PLAYGROUND */
+        .playground {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            max-width: 1400px;
+            margin: 2rem auto;
+        }
+
+        .code-editor, .code-preview {
+            background: var(--bg-card);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px var(--shadow);
+        }
+
+        .editor-header, .preview-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 1rem;
+            color: white;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        textarea {
+            width: 100%;
+            height: 400px;
+            padding: 1.5rem;
+            border: none;
+            background: var(--bg-card);
+            color: var(--text-dark);
+            font-family: 'Space Mono', monospace;
+            font-size: 1rem;
+            resize: none;
+            outline: none;
+        }
+
+        .preview-frame {
+            width: 100%;
+            height: 400px;
+            border: none;
+            background: white;
+        }
+
+        /* LEARNING PATH */
+        .learning-path {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .level {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 25px;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 30px var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .level::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--primary), var(--secondary));
+        }
+
+        .level-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .level-title {
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+
+        .level-progress {
+            background: var(--accent);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .topic-list {
+            list-style: none;
+            padding-left: 2rem;
+        }
+
+        .topic-list li {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--bg-light);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .topic-list li::before {
+            content: '✨';
+            font-size: 1.2rem;
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInDown {
+            from {
+                transform: translateY(-30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* FLOATING ELEMENTS */
+        .floating-shape {
+            position: fixed;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.1;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-50px) rotate(180deg); }
+        }
+
+        .shape-1 {
+            width: 100px;
+            height: 100px;
+            background: var(--primary);
+            border-radius: 50%;
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .shape-2 {
+            width: 80px;
+            height: 80px;
+            background: var(--secondary);
+            top: 60%;
+            right: 10%;
+            animation-delay: 5s;
+        }
+
+        .shape-3 {
+            width: 60px;
+            height: 60px;
+            background: var(--accent);
+            border-radius: 50%;
+            bottom: 20%;
+            left: 15%;
+            animation-delay: 10s;
+        }
+
+        /* PROJECT CARDS */
+        .project-card {
+            background: var(--bg-card);
+            border-radius: 25px;
+            padding: 2rem;
+            box-shadow: 0 8px 30px var(--shadow);
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateX(10px);
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .difficulty {
+            display: flex;
+            gap: 0.2rem;
+        }
+
+        .difficulty span {
+            color: var(--accent);
+            font-size: 1.2rem;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .playground {
+                grid-template-columns: 1fr;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* FOOTER */
+        footer {
+            background: var(--bg-card);
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 -4px 20px var(--shadow);
+            width: 100%;
+            position: relative;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        /* RESULTS */
+        .result-card {
+            background: linear-gradient(135deg, var(--primary)20, var(--secondary)20);
+            border-radius: 30px;
+            padding: 3rem;
+            text-align: center;
+            box-shadow: 0 15px 50px var(--shadow);
+            animation: bounceIn 0.8s ease;
+        }
+
+        .result-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+
+        .result-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px var(--shadow);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            color: var(--text-light);
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- FLOATING SHAPES -->
+    <div class="floating-shape shape-1"></div>
+    <div class="floating-shape shape-2"></div>
+    <div class="floating-shape shape-3"></div>
+
+    <!-- NAVIGATION -->
+    <nav>
+        <div class="logo" onclick="showScreen('home')">CodeFinder 🚀</div>
+        <ul class="nav-links">
+            <li><a onclick="showScreen('home')">Home</a></li>
+            <li><a onclick="showScreen('quiz')">Quiz</a></li>
+            <li><a onclick="showScreen('languages')">Languages</a></li>
+            <li><a onclick="showScreen('projects')">Projects</a></li>
+            <li><a onclick="showScreen('playground')">Playground</a></li>
+            <li><a onclick="showScreen('progress')">Progress</a></li>
+            <li><a onclick="showScreen('suggestions')">Suggest</a></li>
+        </ul>
+        <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+    </nav>
+
+    <!-- SCREEN CONTAINER -->
+    <div class="screen-container">
+        <!-- HOME SCREEN -->
+        <div id="home" class="screen active">
+            <div class="hero">
+                <h1>Find the Perfect Coding Language for You! 🎯</h1>
+                <p>Learn Python or Web Development in a fun, simple way—made especially for kids and beginners!</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-primary" onclick="showScreen('quiz')">Take the Coding Quiz 🎮</button>
+                    <button class="btn btn-secondary" onclick="showScreen('languages')">Start Learning 📚</button>
+                </div>
+            </div>
+
+            <h2 style="text-align: center; margin: 3rem 0 2rem; font-size: 2rem;">Who Is This For?</h2>
+            <div class="card-grid">
+                <div class="card" style="cursor: pointer;" onclick="showScreen('age-9-12')">
+                    <div class="card-icon">🧒</div>
+                    <h3>Kids (ages 9-12)</h3>
+                    <p>Perfect for young learners who want to start their coding journey in a fun way!</p>
+                    <button class="btn btn-primary" style="margin-top: 1rem; width: 100%;" onclick="event.stopPropagation(); showScreen('age-9-12')">Learn More</button>
+                </div>
+                <div class="card" style="cursor: pointer;" onclick="showScreen('age-13-16')">
+                    <div class="card-icon">🧠</div>
+                    <h3>Teens (ages 13-16)</h3>
+                    <p>Ready for more advanced concepts? Build real projects and learn in-demand skills!</p>
+                    <button class="btn btn-primary" style="margin-top: 1rem; width: 100%;" onclick="event.stopPropagation(); showScreen('age-13-16')">Learn More</button>
+                </div>
+                <div class="card" style="cursor: pointer;" onclick="showScreen('age-beginners')">
+                    <div class="card-icon">🎮</div>
+                    <h3>Complete Beginners</h3>
+                    <p>Never coded before? No problem! We'll guide you from zero to hero, step by step.</p>
+                    <button class="btn btn-primary" style="margin-top: 1rem; width: 100%;" onclick="event.stopPropagation(); showScreen('age-beginners')">Learn More</button>
+                </div>
+            </div>
+
+            <h2 style="text-align: center; margin: 3rem 0 2rem; font-size: 2rem;">What You'll Learn</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-icon">🐍</div>
+                    <h3>Python</h3>
+                    <p>Create games, solve puzzles, and build awesome projects with the easiest programming language!</p>
+                    <button class="btn btn-primary" style="margin-top: 1rem;" onclick="showScreen('python')">Learn Python</button>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🌐</div>
+                    <h3>Web Development</h3>
+                    <p>Design beautiful websites with HTML, CSS, and JavaScript. Make your ideas come to life online!</p>
+                    <button class="btn btn-secondary" style="margin-top: 1rem;" onclick="showScreen('webdev')">Build Websites</button>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🌙</div>
+                    <h3>Lua</h3>
+                    <p>Make games in Roblox and learn scripting! Lua is lightweight, fast, and super fun for game development.</p>
+                    <button class="btn btn-primary" style="margin-top: 1rem; background: linear-gradient(135deg, #9333EA, #C084FC);" onclick="showScreen('lua')">Learn Lua</button>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🤖</div>
+                    <h3>n8n Automation</h3>
+                    <p>Automate boring tasks without writing code! Connect apps and create workflows visually.</p>
+                    <button class="btn btn-secondary" style="margin-top: 1rem; background: linear-gradient(135deg, #F59E0B, #EF4444);" onclick="showScreen('n8n')">Learn Automation</button>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🐱</div>
+                    <h3>Scratch</h3>
+                    <p>Drag and drop blocks to create animations, games, and stories! Perfect for complete beginners.</p>
+                    <button class="btn btn-primary" style="margin-top: 1rem; background: linear-gradient(135deg, #FF6680, #FFA94D);" onclick="showScreen('scratch')">Learn Scratch</button>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🤖</div>
+                    <h3>Karel (CodeHS)</h3>
+                    <p>Learn programming basics by commanding Karel the Robot! Great introduction to coding logic.</p>
+                    <button class="btn btn-secondary" style="margin-top: 1rem; background: linear-gradient(135deg, #10B981, #059669);" onclick="showScreen('karel')">Learn Karel</button>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin: 3rem 0;">
+                <h2 style="font-size: 2rem; margin-bottom: 1rem;">Want More Languages? 🌟</h2>
+                <p style="color: var(--text-light); margin-bottom: 1.5rem; font-size: 1.1rem;">Tell us what you'd like to learn!</p>
+                <button class="btn btn-primary" onclick="showScreen('suggestions')">Suggest a Language</button>
+            </div>
+        </div>
+
+        <!-- AGE GROUP SCREENS -->
+        <div id="age-9-12" class="screen">
+            <div style="max-width: 800px; margin: 0 auto;">
+                <h1 style="text-align: center; margin-bottom: 2rem;">Kids Ages 9-12 🧒</h1>
+                <div class="card">
+                    <h2 style="margin-bottom: 1.5rem; color: var(--primary);">Why Start Coding at This Age?</h2>
+                    
+                    <div style="margin-bottom: 2rem;">
+                        <h3 style="color: var(--secondary); margin-bottom: 1rem;">🧠 Perfect Brain Development Stage</h3>
+                        <p style="line-height: 1.8;">At ages 9-12, your brain is like a super-powered learning machine! This is the perfect time to learn logical thinking and problem-solving. Coding helps you think in new ways and builds skills you'll use forever.</p>
+                    </div>
+
+                    <div style="margin-bottom: 2rem;">
+                        <h3 style="color: var(--secondary); margin-bottom: 1rem;">🎮 Turn Play into Learning</h3>
+                        <p style="line-height: 1.8;">Love playing games? Now you can learn to MAKE them! Coding lets you create your own games, animations, and apps. You'll go from player to creator!</p>
+                    </div>
+
+                    <div style="margin-bottom: 2rem;">
+                        <h3 style="color: var(--secondary); margin-bottom: 1rem;">🚀 Future-Ready Skills</h3>
+                        <p style="line-height: 1.8;">Technology is everywhere! Learning to code now gives you a superpower for the future. Whether you want to be a game developer, scientist, doctor, or artist—coding will help you succeed.</p>
+                    </div>
+
+                    <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 15px; margin-bottom: 2rem;">
+                        <h3 style="margin-bottom: 1rem;">📚 Best Languages for Ages 9-12:</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="font-size: 1.5rem;">🐱</span> <strong>Scratch</strong> - Start here! Visual blocks, no typing
+                            </li>
+                            <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="font-size: 1.5rem;">🤖</span> <strong>Karel</strong> - Learn logic with a fun robot
+                            </li>
+                            <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="font-size: 1.5rem;">🐍</span> <strong>Python</strong> - Easy text-based coding
+                            </li>
+                            <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="font-size: 1.5rem;">🌙</span> <strong>Lua</strong> - Perfect for Roblox games!
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <button class="btn btn-primary" onclick="showScreen('quiz')" style="margin: 0.5rem;">Take the Quiz</button>
+                        <button class="btn btn-secondary" onclick="showScreen('languages')" style="margin: 0.5rem;">Browse Languages</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="age-13-16" class="screen">
+            <div style="max-width: 800px; margin: 0 auto;">
+                <h1 style="text-align: center; margin-bottom: 2rem;">Teens Ages 13-16 🧠</h1>
+                <div class="card">
+                    <h2 style="margin-bottom: 1.5rem; color: var(--primary);">Why Coding is Perfect for Teens</h2>
+                    
+                    <div style="margin-bottom: 2rem;">
+                        <h3 style="color: var(--secondary); margin-bottom: 1rem;">💼 Real Career Skills</h3>
+                        <p style="line-height: 1.8;">At your age, you can learn professional-level coding! Companies hire teen coders for internships and freelance work. You could even start earning money while you're still in school!</p>
+                    </div>
+
+                    <div style="margin-bottom: 2rem;">
+                        <h3 style="color: var(--secondary); margin-bottom: 1rem;">🎯 Build Real Projects</h3>
+                        <p style="line-height: 1.8;">You're ready for complex projects! Create your own social media app, build websites for local businesses, or develop games that thousands of people could play. Your creations can make a real impact!</p>
+                    </div>
+
+                    <div style="margin-bottom: 2rem;">
+                        <h3 style="color: var(--secondary); margin-bottom: 1rem;">🌟 Stand Out for College</h3>
+                        <p style="line-height: 1.8;">Colleges LOVE seeing coding projects on applications! Build a portfolio of your work, participate in coding competitions, and join hackathons. This shows initiative and technical skills that set you apart.</p>
+                    </div>
+
+                    <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 15px; margin-bottom: 2rem;">
+                        <h3 style="margin-bottom: 1rem;">📚 Best Languages for Ages 13-16:</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="font-size: 1.5rem;">🐍</span> <strong>Python</strong> - Versatile and powerful
+                            </li>
+                            <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="font-size: 1.5rem;">🌐</span> <strong>Web Development</strong> - Build real websites
+                            </li>
+                            <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="font-size: 1.5rem;">🌙</span> <strong>Lua</strong> - Create & sell Roblox games
+                            </li>
+                            <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="font-size: 1.5rem;">🤖</span> <strong>Automation</strong> - Work smarter, not harder
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <button class="btn btn-primary" onclick="showScreen('quiz')" style="margin: 0.5rem;">Take the Quiz</button>
+                        <button class="btn btn-secondary" onclick="showScreen('languages')" style="margin: 0.5rem;">Browse Languages</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="age-beginners" class="screen">
+            <div style="max-width: 800px; margin: 0 auto;">
+                <h1 style="text-align: center; margin-bottom: 2rem;">Complete Beginners 🎮</h1>
+                <div class="card">
+                    <h2 style="margin-bottom: 1.5rem; color: var(--primary);">Starting from Zero? Perfect!</h2>
+                    
+                    <div style="margin-bottom: 2rem;">
+                        <h3 style="color: var(--secondary); margin-bottom: 1rem;">✨ Everyone Starts Somewhere</h3>
+                        <p style="line-height: 1.8;">Every professional coder was once exactly where you are now—at the very beginning! The best time to start learning is TODAY. It doesn't matter if you've never written a single line of code before.</p>
+                    </div>
+
+                    <div style="margin-bottom: 2rem;">
+                        <h3 style="color: var(--secondary); margin-bottom: 1rem;">🎯 We Make It Easy</h3>
+                        <p style="line-height: 1.8;">Our courses are designed specifically for people who have NEVER coded before. We start with the absolute basics and guide you step-by-step. No confusing jargon, no rushing ahead—just clear, fun learning!</p>
+                    </div>
+
+                    <div style="margin-bottom: 2rem;">
+                        <h3 style="color: var(--secondary); margin-bottom: 1rem;">🚀 See Results Fast</h3>
+                        <p style="line-height: 1.8;">Within your first hour, you'll create something you can show off to friends and family! Coding is magical—you type some text and suddenly things happen on screen. It's addictive in the best way!</p>
+                    </div>
+
+                    <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 15px; margin-bottom: 2rem;">
+                        <h3 style="margin-bottom: 1rem;">📚 Best Starting Points:</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="font-size: 1.5rem;">🐱</span> <strong>Scratch</strong> - Perfect first language! No typing required
+                            </li>
+                            <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="font-size: 1.5rem;">🤖</span> <strong>Karel</strong> - Learn logic through fun puzzles
+                            </li>
+                            <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="font-size: 1.5rem;">🌐</span> <strong>HTML/CSS</strong> - Build your first website today!
+                            </li>
+                            <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="font-size: 1.5rem;">🐍</span> <strong>Python</strong> - Easiest text-based language
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <button class="btn btn-primary" onclick="showScreen('quiz')" style="margin: 0.5rem;">Take the Quiz</button>
+                        <button class="btn btn-secondary" onclick="showScreen('scratch')" style="margin: 0.5rem;">Start with Scratch</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- QUIZ SCREEN -->
+        <div id="quiz" class="screen">
+            <div class="quiz-container">
+                <h1 style="text-align: center; margin-bottom: 2rem;">Find Your Perfect Language! 🎯</h1>
+                <p style="text-align: center; font-size: 1.2rem; margin-bottom: 3rem; color: var(--text-light);">Answer a few fun questions and we'll tell you which coding language fits you best!</p>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="quizProgress" style="width: 0%"></div>
+                </div>
+
+                <div id="quizContent"></div>
+            </div>
+        </div>
+
+        <!-- LANGUAGES SCREEN -->
+        <div id="languages" class="screen">
+            <h1 style="text-align: center; margin-bottom: 3rem;">Choose Your Path 🛤️</h1>
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-icon">🐍</div>
+                    <h3>Python</h3>
+                    <p><strong>What it's used for:</strong> Games, AI, automation, problem-solving, and more!</p>
+                    <p><strong>Why kids love it:</strong> Easy to read and powerful. See results fast!</p>
+                    <div class="difficulty">
+                        <span>⭐</span><span>⭐</span><span style="opacity: 0.3;">⭐</span><span style="opacity: 0.3;">⭐</span><span style="opacity: 0.3;">⭐</span>
+                    </div>
+                    <button class="btn btn-primary" style="margin-top: 1rem; width: 100%;" onclick="showScreen('python')">Learn Python</button>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🌐</div>
+                    <h3>Web Development</h3>
+                    <p><strong>HTML</strong> – Structure your pages<br>
+                    <strong>CSS</strong> – Style and design<br>
+                    <strong>JavaScript</strong> – Make it interactive!</p>
+                    <div class="difficulty">
+                        <span>⭐</span><span>⭐</span><span>⭐</span><span style="opacity: 0.3;">⭐</span><span style="opacity: 0.3;">⭐</span>
+                    </div>
+                    <button class="btn btn-secondary" style="margin-top: 1rem; width: 100%;" onclick="showScreen('webdev')">Build Websites</button>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🌙</div>
+                    <h3>Lua</h3>
+                    <p><strong>What it's used for:</strong> Roblox games, game scripting, embedded systems!</p>
+                    <p><strong>Why kids love it:</strong> Perfect for Roblox Studio. Fast and simple!</p>
+                    <div class="difficulty">
+                        <span>⭐</span><span>⭐</span><span style="opacity: 0.3;">⭐</span><span style="opacity: 0.3;">⭐</span><span style="opacity: 0.3;">⭐</span>
+                    </div>
+                    <button class="btn btn-primary" style="margin-top: 1rem; width: 100%; background: linear-gradient(135deg, #9333EA, #C084FC);" onclick="showScreen('lua')">Learn Lua</button>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🤖</div>
+                    <h3>n8n Automation</h3>
+                    <p><strong>What it's used for:</strong> Automating tasks, connecting apps, building workflows!</p>
+                    <p><strong>Why kids love it:</strong> No coding needed! Visual and powerful!</p>
+                    <div class="difficulty">
+                        <span>⭐</span><span style="opacity: 0.3;">⭐</span><span style="opacity: 0.3;">⭐</span><span style="opacity: 0.3;">⭐</span><span style="opacity: 0.3;">⭐</span>
+                    </div>
+                    <button class="btn btn-secondary" style="margin-top: 1rem; width: 100%; background: linear-gradient(135deg, #F59E0B, #EF4444);" onclick="showScreen('n8n')">Learn n8n</button>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🐱</div>
+                    <h3>Scratch</h3>
+                    <p><strong>What it's used for:</strong> Animations, games, interactive stories!</p>
+                    <p><strong>Why kids love it:</strong> Drag and drop! No typing needed. Perfect first language!</p>
+                    <div class="difficulty">
+                        <span>⭐</span><span style="opacity: 0.3;">⭐</span><span style="opacity: 0.3;">⭐</span><span style="opacity: 0.3;">⭐</span><span style="opacity: 0.3;">⭐</span>
+                    </div>
+                    <button class="btn btn-primary" style="margin-top: 1rem; width: 100%; background: linear-gradient(135deg, #FF6680, #FFA94D);" onclick="showScreen('scratch')">Learn Scratch</button>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🤖</div>
+                    <h3>Karel (CodeHS)</h3>
+                    <p><strong>What it's used for:</strong> Learning programming logic and concepts!</p>
+                    <p><strong>Why kids love it:</strong> Command a robot! Learn by solving fun puzzles!</p>
+                    <div class="difficulty">
+                        <span>⭐</span><span style="opacity: 0.3;">⭐</span><span style="opacity: 0.3;">⭐</span><span style="opacity: 0.3;">⭐</span><span style="opacity: 0.3;">⭐</span>
+                    </div>
+                    <button class="btn btn-secondary" style="margin-top: 1rem; width: 100%; background: linear-gradient(135deg, #10B981, #059669);" onclick="showScreen('karel')">Learn Karel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PYTHON LEARNING SCREEN -->
+        <div id="python" class="screen">
+            <h1 style="text-align: center; margin-bottom: 3rem;">Python Learning Path 🐍</h1>
+            <div class="learning-path">
+                <div class="level">
+                    <div class="level-header">
+                        <h3 class="level-title">Level 1: Python Basics</h3>
+                        <span class="level-progress" id="python-level1">0% Complete</span>
+                    </div>
+                    <ul class="topic-list">
+                        <li onclick="markComplete('python', 1)">Variables & Data Types</li>
+                        <li onclick="markComplete('python', 1)">Loops (for & while)</li>
+                        <li onclick="markComplete('python', 1)">If Statements & Logic</li>
+                        <li onclick="markComplete('python', 1)">Functions</li>
+                    </ul>
+                    <button class="btn btn-primary" style="margin-top: 1.5rem;" onclick="showScreen('playground')">Try in Playground</button>
+                </div>
+
+                <div class="level">
+                    <div class="level-header">
+                        <h3 class="level-title">Level 2: Fun Projects</h3>
+                        <span class="level-progress" id="python-level2">0% Complete</span>
+                    </div>
+                    <ul class="topic-list">
+                        <li onclick="markComplete('python', 2)">Number Guessing Game</li>
+                        <li onclick="markComplete('python', 2)">Dice Roller</li>
+                        <li onclick="markComplete('python', 2)">Simple Calculator</li>
+                        <li onclick="markComplete('python', 2)">Rock Paper Scissors</li>
+                    </ul>
+                </div>
+
+                <div class="level">
+                    <div class="level-header">
+                        <h3 class="level-title">Level 3: Mini Challenges</h3>
+                        <span class="level-progress" id="python-level3">0% Complete</span>
+                    </div>
+                    <ul class="topic-list">
+                        <li onclick="markComplete('python', 3)">Code Puzzles</li>
+                        <li onclick="markComplete('python', 3)">Algorithm Challenges</li>
+                        <li onclick="markComplete('python', 3)">Quiz Time!</li>
+                        <li onclick="markComplete('python', 3)">Build Your Own Project</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- WEB DEV LEARNING SCREEN -->
+        <div id="webdev" class="screen">
+            <h1 style="text-align: center; margin-bottom: 3rem;">Web Development Path 🌐</h1>
+            <div class="learning-path">
+                <div class="level">
+                    <div class="level-header">
+                        <h3 class="level-title">HTML Basics</h3>
+                        <span class="level-progress" id="webdev-level1">0% Complete</span>
+                    </div>
+                    <ul class="topic-list">
+                        <li onclick="markComplete('webdev', 1)">Headings & Paragraphs</li>
+                        <li onclick="markComplete('webdev', 1)">Images & Links</li>
+                        <li onclick="markComplete('webdev', 1)">Lists & Tables</li>
+                        <li onclick="markComplete('webdev', 1)">Forms & Buttons</li>
+                    </ul>
+                    <button class="btn btn-secondary" style="margin-top: 1.5rem;" onclick="showScreen('playground')">Try in Playground</button>
+                </div>
+
+                <div class="level">
+                    <div class="level-header">
+                        <h3 class="level-title">CSS Basics</h3>
+                        <span class="level-progress" id="webdev-level2">0% Complete</span>
+                    </div>
+                    <ul class="topic-list">
+                        <li onclick="markComplete('webdev', 2)">Colors & Fonts</li>
+                        <li onclick="markComplete('webdev', 2)">Layout & Positioning</li>
+                        <li onclick="markComplete('webdev', 2)">Fun Animations!</li>
+                        <li onclick="markComplete('webdev', 2)">Responsive Design</li>
+                    </ul>
+                </div>
+
+                <div class="level">
+                    <div class="level-header">
+                        <h3 class="level-title">JavaScript Basics</h3>
+                        <span class="level-progress" id="webdev-level3">0% Complete</span>
+                    </div>
+                    <ul class="topic-list">
+                        <li onclick="markComplete('webdev', 3)">Variables & Functions</li>
+                        <li onclick="markComplete('webdev', 3)">Button Interactions</li>
+                        <li onclick="markComplete('webdev', 3)">Simple Games</li>
+                        <li onclick="markComplete('webdev', 3)">DOM Manipulation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- LUA LEARNING SCREEN -->
+        <div id="lua" class="screen">
+            <h1 style="text-align: center; margin-bottom: 3rem;">Lua Learning Path 🌙</h1>
+            <div class="learning-path">
+                <div class="level">
+                    <div class="level-header">
+                        <h3 class="level-title">Level 1: Lua Basics</h3>
+                        <span class="level-progress" id="lua-level1">0% Complete</span>
+                    </div>
+                    <ul class="topic-list">
+                        <li onclick="markComplete('lua', 1)">Variables & Data Types</li>
+                        <li onclick="markComplete('lua', 1)">Loops & Conditionals</li>
+                        <li onclick="markComplete('lua', 1)">Functions & Tables</li>
+                        <li onclick="markComplete('lua', 1)">String Manipulation</li>
+                    </ul>
+                    <button class="btn btn-primary" style="margin-top: 1.5rem; background: linear-gradient(135deg, #9333EA, #C084FC);" onclick="showScreen('playground')">Try in Playground</button>
+                </div>
+
+                <div class="level">
+                    <div class="level-header">
+                        <h3 class="level-title">Level 2: Roblox Studio</h3>
+                        <span class="level-progress" id="lua-level2">0% Complete</span>
+                    </div>
+                    <ul class="topic-list">
+                        <li onclick="markComplete('lua', 2)">Roblox Studio Basics</li>
+                        <li onclick="markComplete('lua', 2)">Creating Parts & Objects</li>
+                        <li onclick="markComplete('lua', 2)">Scripts vs LocalScripts</li>
+                        <li onclick="markComplete('lua', 2)">Basic Game Mechanics</li>
+                    </ul>
+                </div>
+
+                <div class="level">
+                    <div class="level-header">
+                        <h3 class="level-title">Level 3: Game Development</h3>
+                        <span class="level-progress" id="lua-level3">0% Complete</span>
+                    </div>
+                    <ul class="topic-list">
+                        <li onclick="markComplete('lua', 3)">Player Movement & Controls</li>
+                        <li onclick="markComplete('lua', 3)">Collecting Items & Scoring</li>
+                        <li onclick="markComplete('lua', 3)">GUI & User Interface</li>
+                        <li onclick="markComplete('lua', 3)">Publishing Your Game!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- N8N AUTOMATION SCREEN -->
+        <div id="n8n" class="screen">
+            <h1 style="text-align: center; margin-bottom: 3rem;">n8n Automation Path 🤖</h1>
+            <div class="learning-path">
+                <div class="level">
+                    <div class="level-header">
+                        <h3 class="level-title">Level 1: Getting Started</h3>
+                        <span class="level-progress" id="n8n-level1">0% Complete</span>
+                    </div>
+                    <ul class="topic-list">
+                        <li onclick="markComplete('n8n', 1)">What is Automation?</li>
+                        <li onclick="markComplete('n8n', 1)">n8n Interface Basics</li>
+                        <li onclick="markComplete('n8n', 1)">Your First Workflow</li>
+                        <li onclick="markComplete('n8n', 1)">Connecting Nodes</li>
+                    </ul>
+                </div>
+
+                <div class="level">
+                    <div class="level-header">
+                        <h3 class="level-title">Level 2: Building Workflows</h3>
+                        <span class="level-progress" id="n8n-level2">0% Complete</span>
+                    </div>
+                    <ul class="topic-list">
+                        <li onclick="markComplete('n8n', 2)">Connecting Apps (Google, Discord, etc.)</li>
+                        <li onclick="markComplete('n8n', 2)">Triggers & Actions</li>
+                        <li onclick="markComplete('n8n', 2)">Data Transformation</li>
+                        <li onclick="markComplete('n8n', 2)">Conditional Logic</li>
+                    </ul>
+                </div>
+
+                <div class="level">
+                    <div class="level-header">
+                        <h3 class="level-title">Level 3: Cool Automations</h3>
+                        <span class="level-progress" id="n8n-level3">0% Complete</span>
+                    </div>
+                    <ul class="topic-list">
+                        <li onclick="markComplete('n8n', 3)">Auto-post to Social Media</li>
+                        <li onclick="markComplete('n8n', 3)">Birthday Reminder Bot</li>
+                        <li onclick="markComplete('n8n', 3)">File Organization System</li>
+                        <li onclick="markComplete('n8n', 3)">Build Your Own Bot!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCRATCH LEARNING SCREEN -->
+        <div id="scratch" class="screen">
+            <h1 style="text-align: center; margin-bottom: 3rem;">Scratch Learning Path 🐱</h1>
+            <div class="learning-path">
+                <div class="level">
+                    <div class="level-header">
+                        <h3 class="level-title">Level 1: Scratch Basics</h3>
+                        <span class="level-progress" id="scratch-level1">0% Complete</span>
+                    </div>
+                    <ul class="topic-list">
+                        <li onclick="markComplete('scratch', 1)">Meet the Scratch Interface</li>
+                        <li onclick="markComplete('scratch', 1)">Moving Sprites Around</li>
+                        <li onclick="markComplete('scratch', 1)">Adding Sounds & Costumes</li>
+                        <li onclick="markComplete('scratch', 1)">Your First Animation!</li>
+                    </ul>
+                    <button class="btn btn-primary" style="margin-top: 1.5rem; background: linear-gradient(135deg, #FF6680, #FFA94D);" onclick="window.open('https://scratch.mit.edu', '_blank')">Open Scratch Website</button>
+                </div>
+
+                <div class="level">
+                    <div class="level-header">
+                        <h3 class="level-title">Level 2: Making Games</h3>
+                        <span class="level-progress" id="scratch-level2">0% Complete</span>
+                    </div>
+                    <ul class="topic-list">
+                        <li onclick="markComplete('scratch', 2)">Control Sprites with Keys</li>
+                        <li onclick="markComplete('scratch', 2)">Detect Collisions</li>
+                        <li onclick="markComplete('scratch', 2)">Keep Score & Lives</li>
+                        <li onclick="markComplete('scratch', 2)">Create a Chase Game!</li>
+                    </ul>
+                </div>
+
+                <div class="level">
+                    <div class="level-header">
+                        <h3 class="level-title">Level 3: Advanced Projects</h3>
+                        <span class="level-progress" id="scratch-level3">0% Complete</span>
+                    </div>
+                    <ul class="topic-list">
+                        <li onclick="markComplete('scratch', 3)">Variables & Lists</li>
+                        <li onclick="markComplete('scratch', 3)">Clone Sprites</li>
+                        <li onclick="markComplete('scratch', 3)">Create Your Own Blocks</li>
+                        <li onclick="markComplete('scratch', 3)">Share Your Game Online!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- KAREL LEARNING SCREEN -->
+        <div id="karel" class="screen">
+            <h1 style="text-align: center; margin-bottom: 3rem;">Karel (CodeHS) Learning Path 🤖</h1>
+            <div class="learning-path">
+                <div class="level">
+                    <div class="level-header">
+                        <h3 class="level-title">Level 1: Meet Karel</h3>
+                        <span class="level-progress" id="karel-level1">0% Complete</span>
+                    </div>
+                    <ul class="topic-list">
+                        <li onclick="markComplete('karel', 1)">What is Karel the Robot?</li>
+                        <li onclick="markComplete('karel', 1)">Basic Commands (move, turnLeft)</li>
+                        <li onclick="markComplete('karel', 1)">Pick Up & Put Down Beepers</li>
+                        <li onclick="markComplete('karel', 1)">Your First Karel Program!</li>
+                    </ul>
+                    <button class="btn btn-secondary" style="margin-top: 1.5rem; background: linear-gradient(135deg, #10B981, #059669);" onclick="window.open('https://codehs.com/karel', '_blank')">Try Karel on CodeHS</button>
+                </div>
+
+                <div class="level">
+                    <div class="level-header">
+                        <h3 class="level-title">Level 2: Control Structures</h3>
+                        <span class="level-progress" id="karel-level2">0% Complete</span>
+                    </div>
+                    <ul class="topic-list">
+                        <li onclick="markComplete('karel', 2)">For Loops</li>
+                        <li onclick="markComplete('karel', 2)">While Loops</li>
+                        <li onclick="markComplete('karel', 2)">If Statements</li>
+                        <li onclick="markComplete('karel', 2)">Functions & Decomposition</li>
+                    </ul>
+                </div>
+
+                <div class="level">
+                    <div class="level-header">
+                        <h3 class="level-title">Level 3: Problem Solving</h3>
+                        <span class="level-progress" id="karel-level3">0% Complete</span>
+                    </div>
+                    <ul class="topic-list">
+                        <li onclick="markComplete('karel', 3)">Solve Complex Mazes</li>
+                        <li onclick="markComplete('karel', 3)">Build Patterns</li>
+                        <li onclick="markComplete('karel', 3)">Top-Down Design</li>
+                        <li onclick="markComplete('karel', 3)">Create Your Own Puzzle!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROJECTS SCREEN -->
+        <div id="projects" class="screen">
+            <h1 style="text-align: center; margin-bottom: 3rem;">Fun Projects to Build 🛠️</h1>
+            
+            <h2 style="margin: 2rem 0 1rem; color: var(--primary);">🐍 Python Projects</h2>
+            <div class="project-card">
+                <div class="project-header">
+                    <h3>Number Guessing Game</h3>
+                    <div class="difficulty">
+                        <span>⭐</span><span>⭐</span><span style="opacity: 0.3;">⭐</span>
+                    </div>
+                </div>
+                <p>Build a game where the computer picks a number and you guess it!</p>
+                <p style="margin-top: 0.5rem;"><strong>Time:</strong> 30 minutes | <strong>Learn:</strong> Loops, conditionals, random numbers</p>
+                <button class="btn btn-primary" style="margin-top: 1rem;">Start Project</button>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <h3>Dice Roller</h3>
+                    <div class="difficulty">
+                        <span>⭐</span><span style="opacity: 0.3;">⭐</span><span style="opacity: 0.3;">⭐</span>
+                    </div>
+                </div>
+                <p>Create a virtual dice that you can roll anytime!</p>
+                <p style="margin-top: 0.5rem;"><strong>Time:</strong> 20 minutes | <strong>Learn:</strong> Functions, random module</p>
+                <button class="btn btn-primary" style="margin-top: 1rem;">Start Project</button>
+            </div>
+
+            <h2 style="margin: 2rem 0 1rem; color: var(--secondary);">🌐 Web Projects</h2>
+            <div class="project-card">
+                <div class="project-header">
+                    <h3>Personal Website</h3>
+                    <div class="difficulty">
+                        <span>⭐</span><span>⭐</span><span style="opacity: 0.3;">⭐</span>
+                    </div>
+                </div>
+                <p>Build your own website to show off your hobbies and interests!</p>
+                <p style="margin-top: 0.5rem;"><strong>Time:</strong> 45 minutes | <strong>Learn:</strong> HTML, CSS, basic layout</p>
+                <button class="btn btn-secondary" style="margin-top: 1rem;">Start Project</button>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <h3>Mini Web Game</h3>
+                    <div class="difficulty">
+                        <span>⭐</span><span>⭐</span><span>⭐</span>
+                    </div>
+                </div>
+                <p>Create a simple clicking game with JavaScript!</p>
+                <p style="margin-top: 0.5rem;"><strong>Time:</strong> 1 hour | <strong>Learn:</strong> JavaScript events, game logic</p>
+                <button class="btn btn-secondary" style="margin-top: 1rem;">Start Project</button>
+            </div>
+
+            <h2 style="margin: 2rem 0 1rem; color: #9333EA;">🌙 Lua Projects</h2>
+            <div class="project-card">
+                <div class="project-header">
+                    <h3>Roblox Obby (Obstacle Course)</h3>
+                    <div class="difficulty">
+                        <span>⭐</span><span>⭐</span><span style="opacity: 0.3;">⭐</span>
+                    </div>
+                </div>
+                <p>Create your first Roblox game with obstacles and checkpoints!</p>
+                <p style="margin-top: 0.5rem;"><strong>Time:</strong> 1 hour | <strong>Learn:</strong> Roblox Studio, basic scripting</p>
+                <button class="btn btn-primary" style="margin-top: 1rem; background: linear-gradient(135deg, #9333EA, #C084FC);">Start Project</button>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <h3>Coin Collector Game</h3>
+                    <div class="difficulty">
+                        <span>⭐</span><span>⭐</span><span>⭐</span>
+                    </div>
+                </div>
+                <p>Make a game where players collect coins and track their score!</p>
+                <p style="margin-top: 0.5rem;"><strong>Time:</strong> 1.5 hours | <strong>Learn:</strong> Touch events, GUI, scoring system</p>
+                <button class="btn btn-primary" style="margin-top: 1rem; background: linear-gradient(135deg, #9333EA, #C084FC);">Start Project</button>
+            </div>
+
+            <h2 style="margin: 2rem 0 1rem; color: #F59E0B;">🤖 Automation Projects</h2>
+            <div class="project-card">
+                <div class="project-header">
+                    <h3>Birthday Reminder Bot</h3>
+                    <div class="difficulty">
+                        <span>⭐</span><span style="opacity: 0.3;">⭐</span><span style="opacity: 0.3;">⭐</span>
+                    </div>
+                </div>
+                <p>Auto-send birthday messages to friends on Discord or email!</p>
+                <p style="margin-top: 0.5rem;"><strong>Time:</strong> 30 minutes | <strong>Learn:</strong> Triggers, webhooks, scheduling</p>
+                <button class="btn btn-secondary" style="margin-top: 1rem; background: linear-gradient(135deg, #F59E0B, #EF4444);">Start Project</button>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <h3>Auto File Organizer</h3>
+                    <div class="difficulty">
+                        <span>⭐</span><span>⭐</span><span style="opacity: 0.3;">⭐</span>
+                    </div>
+                </div>
+                <p>Automatically organize your downloads folder by file type!</p>
+                <p style="margin-top: 0.5rem;"><strong>Time:</strong> 45 minutes | <strong>Learn:</strong> File operations, conditionals, automation</p>
+                <button class="btn btn-secondary" style="margin-top: 1rem; background: linear-gradient(135deg, #F59E0B, #EF4444);">Start Project</button>
+            </div>
+        </div>
+
+        <!-- CODE PLAYGROUND SCREEN -->
+        <div id="playground" class="screen">
+            <h1 style="text-align: center; margin-bottom: 2rem;">Code Playground ⚡</h1>
+            <p style="text-align: center; margin-bottom: 2rem; color: var(--text-light);">Try out your code and see it come to life!</p>
+            
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <label style="font-weight: 600; margin-right: 1rem;">Choose Language:</label>
+                <select id="languageSelector" onchange="changeLanguage()" style="padding: 0.7rem 1.5rem; font-size: 1rem; border-radius: 10px; border: 2px solid var(--secondary); background: var(--bg-card); color: var(--text-dark); cursor: pointer; font-family: 'Fredoka', sans-serif;">
+                    <option value="html">HTML/CSS/JS</option>
+                    <option value="python">Python</option>
+                    <option value="javascript">JavaScript</option>
+                    <option value="lua">Lua</option>
+                </select>
+            </div>
+            
+            <div class="playground">
+                <div class="code-editor">
+                    <div class="editor-header">
+                        <span id="editorTitle">✏️ Code Editor - HTML/CSS/JS</span>
+                        <button class="btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="runCode()">▶️ Run Code</button>
+                    </div>
+                    <textarea id="codeInput" placeholder="Write your code here..."></textarea>
+                </div>
+                <div class="code-preview">
+                    <div class="preview-header">
+                        <span>👁️ Output</span>
+                        <button class="btn" style="padding: 0.3rem 0.8rem; font-size: 0.8rem; background: var(--text-light);" onclick="clearOutput()">Clear</button>
+                    </div>
+                    <div id="output" style="width: 100%; height: 400px; padding: 1rem; background: white; color: #1a1a1a; overflow: auto; font-family: 'Space Mono', monospace; white-space: pre-wrap;"></div>
+                    <iframe id="previewFrame" class="preview-frame" style="display: none;"></iframe>
+                </div>
+            </div>
+
+            <div style="max-width: 900px; margin: 2rem auto;">
+                <div class="card">
+                    <h3 style="margin-bottom: 1rem;">💡 Quick Tips:</h3>
+                    <ul id="playgroundTips" style="list-style: none; padding-left: 0;">
+                        <li style="padding: 0.5rem 0;">✨ Edit the code and click "Run" to see what happens!</li>
+                        <li style="padding: 0.5rem 0;">🎨 Try changing colors, text, or numbers</li>
+                        <li style="padding: 0.5rem 0;">🚀 Experiment and have fun - you can't break anything!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- LANGUAGE SUGGESTIONS SCREEN -->
+        <div id="suggestions" class="screen">
+            <h1 style="text-align: center; margin-bottom: 2rem;">Language Suggestions 💡</h1>
+            <div style="max-width: 800px; margin: 0 auto;">
+                <div class="card" style="margin-bottom: 2rem;">
+                    <h2 style="text-align: center; margin-bottom: 1.5rem;">Help Us Grow! 🌱</h2>
+                    <p style="text-align: center; margin-bottom: 2rem; color: var(--text-light); font-size: 1.1rem;">
+                        We want to know what YOU want to learn! Tell us about languages you know or want to learn.
+                    </p>
+                    
+                    <div style="background: var(--bg-light); padding: 2rem; border-radius: 20px; margin-bottom: 2rem;">
+                        <h3 style="margin-bottom: 1rem;">Do you already know any programming languages? 🤔</h3>
+                        <div style="display: grid; gap: 1rem;">
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" id="know-python" style="width: 20px; height: 20px; cursor: pointer;">
+                                <span style="font-size: 1.1rem;">🐍 Python</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" id="know-javascript" style="width: 20px; height: 20px; cursor: pointer;">
+                                <span style="font-size: 1.1rem;">💛 JavaScript</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" id="know-lua" style="width: 20px; height: 20px; cursor: pointer;">
+                                <span style="font-size: 1.1rem;">🌙 Lua</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" id="know-java" style="width: 20px; height: 20px; cursor: pointer;">
+                                <span style="font-size: 1.1rem;">☕ Java</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" id="know-csharp" style="width: 20px; height: 20px; cursor: pointer;">
+                                <span style="font-size: 1.1rem;">🎮 C#</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" id="know-scratch" style="width: 20px; height: 20px; cursor: pointer;">
+                                <span style="font-size: 1.1rem;">🐱 Scratch</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" id="know-other" style="width: 20px; height: 20px; cursor: pointer;">
+                                <span style="font-size: 1.1rem;">✨ Other</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div style="background: var(--bg-light); padding: 2rem; border-radius: 20px; margin-bottom: 2rem;">
+                        <h3 style="margin-bottom: 1rem;">What languages would you like us to add? 🎯</h3>
+                        <p style="color: var(--text-light); margin-bottom: 1rem;">Pick as many as you want!</p>
+                        <div style="display: grid; gap: 1rem;">
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" id="want-java" style="width: 20px; height: 20px; cursor: pointer;">
+                                <span style="font-size: 1.1rem;">☕ Java - Build Android apps & Minecraft mods!</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" id="want-csharp" style="width: 20px; height: 20px; cursor: pointer;">
+                                <span style="font-size: 1.1rem;">🎮 C# - Create Unity games!</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" id="want-scratch" style="width: 20px; height: 20px; cursor: pointer;">
+                                <span style="font-size: 1.1rem;">🐱 Scratch - Visual coding for beginners!</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" id="want-cpp" style="width: 20px; height: 20px; cursor: pointer;">
+                                <span style="font-size: 1.1rem;">⚡ C++ - Game engines & high performance!</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" id="want-rust" style="width: 20px; height: 20px; cursor: pointer;">
+                                <span style="font-size: 1.1rem;">🦀 Rust - Safe & fast systems programming!</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" id="want-go" style="width: 20px; height: 20px; cursor: pointer;">
+                                <span style="font-size: 1.1rem;">🐹 Go - Simple & powerful for servers!</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" id="want-swift" style="width: 20px; height: 20px; cursor: pointer;">
+                                <span style="font-size: 1.1rem;">🍎 Swift - Build iOS apps!</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" id="want-kotlin" style="width: 20px; height: 20px; cursor: pointer;">
+                                <span style="font-size: 1.1rem;">📱 Kotlin - Modern Android development!</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div style="background: var(--bg-light); padding: 2rem; border-radius: 20px; margin-bottom: 2rem;">
+                        <h3 style="margin-bottom: 1rem;">Any other suggestions? 💭</h3>
+                        <textarea id="otherSuggestions" placeholder="Tell us what else you'd like to see! Maybe a specific topic, project, or tool?" style="width: 100%; height: 120px; padding: 1rem; border: 2px solid var(--secondary); border-radius: 15px; font-family: 'Fredoka', sans-serif; font-size: 1rem; resize: vertical;"></textarea>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <button class="btn btn-primary" onclick="submitSuggestions()" style="font-size: 1.2rem; padding: 1.2rem 3rem;">
+                            Submit Your Ideas! 🚀
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 style="text-align: center; margin-bottom: 1rem;">Popular Requests 🔥</h3>
+                    <p style="text-align: center; color: var(--text-light); margin-bottom: 1.5rem;">Here's what other learners are asking for!</p>
+                    <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
+                        <div class="badge">
+                            <span class="badge-icon">☕</span>
+                            <span>Java - 247 votes</span>
+                        </div>
+                        <div class="badge">
+                            <span class="badge-icon">🎮</span>
+                            <span>C# - 189 votes</span>
+                        </div>
+                        <div class="badge">
+                            <span class="badge-icon">🐱</span>
+                            <span>Scratch - 156 votes</span>
+                        </div>
+                        <div class="badge">
+                            <span class="badge-icon">⚡</span>
+                            <span>C++ - 134 votes</span>
+                        </div>
+                        <div class="badge">
+                            <span class="badge-icon">🍎</span>
+                            <span>Swift - 98 votes</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROGRESS SCREEN -->
+        <div id="progress" class="screen">
+            <h1 style="text-align: center; margin-bottom: 3rem;">Your Progress 📊</h1>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalBadges">0</div>
+                    <div class="stat-label">Badges Earned</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="lessonsCompleted">0</div>
+                    <div class="stat-label">Lessons Completed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="projectsBuilt">0</div>
+                    <div class="stat-label">Projects Built</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="codingStreak">0</div>
+                    <div class="stat-label">Day Streak 🔥</div>
+                </div>
+            </div>
+
+            <h2 style="text-align: center; margin: 3rem 0 2rem;">Your Badges 🏆</h2>
+            <div class="badge-container">
+                <div class="badge" id="badge-starter">
+                    <span class="badge-icon">🌟</span>
+                    <span>First Steps</span>
+                </div>
+                <div class="badge locked" id="badge-quiz">
+                    <span class="badge-icon">🎯</span>
+                    <span>Quiz Master</span>
+                </div>
+                <div class="badge locked" id="badge-python">
+                    <span class="badge-icon">🐍</span>
+                    <span>Python Pro</span>
+                </div>
+                <div class="badge locked" id="badge-webdev">
+                    <span class="badge-icon">🌐</span>
+                    <span>Web Wizard</span>
+                </div>
+                <div class="badge locked" id="badge-lua">
+                    <span class="badge-icon">🌙</span>
+                    <span>Lua Legend</span>
+                </div>
+                <div class="badge locked" id="badge-n8n">
+                    <span class="badge-icon">🤖</span>
+                    <span>Automation Master</span>
+                </div>
+                <div class="badge locked" id="badge-scratch">
+                    <span class="badge-icon">🐱</span>
+                    <span>Scratch Star</span>
+                </div>
+                <div class="badge locked" id="badge-karel">
+                    <span class="badge-icon">🤖</span>
+                    <span>Karel Commander</span>
+                </div>
+                <div class="badge locked" id="badge-project">
+                    <span class="badge-icon">🛠️</span>
+                    <span>Project Builder</span>
+                </div>
+                <div class="badge locked" id="badge-streak">
+                    <span class="badge-icon">🔥</span>
+                    <span>7 Day Streak</span>
+                </div>
+                <div class="badge locked" id="badge-creative">
+                    <span class="badge-icon">🎨</span>
+                    <span>Creative Coder</span>
+                </div>
+                <div class="badge locked" id="badge-expert">
+                    <span class="badge-icon">💎</span>
+                    <span>Coding Expert</span>
+                </div>
+            </div>
+
+            <h2 style="text-align: center; margin: 3rem 0 2rem;">Learning Paths Progress</h2>
+            <div class="card">
+                <h3>🐍 Python Path</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="pythonProgress" style="width: 0%"></div>
+                </div>
+                <p style="text-align: center; margin-top: 0.5rem;" id="pythonPercent">0% Complete</p>
+            </div>
+            <div class="card" style="margin-top: 1.5rem;">
+                <h3>🌐 Web Development Path</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="webdevProgress" style="width: 0%"></div>
+                </div>
+                <p style="text-align: center; margin-top: 0.5rem;" id="webdevPercent">0% Complete</p>
+            </div>
+            <div class="card" style="margin-top: 1.5rem;">
+                <h3>🌙 Lua Path</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="luaProgress" style="width: 0%"></div>
+                </div>
+                <p style="text-align: center; margin-top: 0.5rem;" id="luaPercent">0% Complete</p>
+            </div>
+            <div class="card" style="margin-top: 1.5rem;">
+                <h3>🤖 n8n Automation Path</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="n8nProgress" style="width: 0%"></div>
+                </div>
+                <p style="text-align: center; margin-top: 0.5rem;" id="n8nPercent">0% Complete</p>
+            </div>
+            <div class="card" style="margin-top: 1.5rem;">
+                <h3>🐱 Scratch Path</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="scratchProgress" style="width: 0%"></div>
+                </div>
+                <p style="text-align: center; margin-top: 0.5rem;" id="scratchPercent">0% Complete</p>
+            </div>
+            <div class="card" style="margin-top: 1.5rem;">
+                <h3>🤖 Karel Path</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="karelProgress" style="width: 0%"></div>
+                </div>
+                <p style="text-align: center; margin-top: 0.5rem;" id="karelPercent">0% Complete</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a onclick="showScreen('home')">Home</a>
+                <a onclick="showScreen('quiz')">Quiz</a>
+                <a onclick="showScreen('python')">Learn Python</a>
+                <a onclick="showScreen('webdev')">Learn Web Dev</a>
+                <a onclick="showScreen('projects')">Projects</a>
+                <a onclick="showScreen('playground')">Playground</a>
+            </div>
+            <p style="margin-top: 1rem; color: var(--text-light);">Made with ❤️ for kids learning to code</p>
+            <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-light);">Keep coding, keep learning, keep creating! 🚀</p>
+        </div>
+    </footer>
+
+    <script>
+        // QUIZ DATA
+        const quizQuestions = [
+            {
+                question: "What sounds more fun to you? 🎮",
+                options: [
+                    { text: "🎮 Making games and solving puzzles", value: "python", icon: "🎮" },
+                    { text: "🌐 Designing cool websites", value: "web", icon: "🌐" },
+                    { text: "🐱 Drag-and-drop block coding", value: "scratch", icon: "🐱" },
+                    { text: "🤖 Commanding a robot through mazes", value: "karel", icon: "🤖" },
+                    { text: "🌙 Building Roblox games", value: "lua", icon: "🌙" },
+                    { text: "⚡ Automating my tasks", value: "n8n", icon: "⚡" }
+                ]
+            },
+            {
+                question: "How do you prefer to code? 💻",
+                options: [
+                    { text: "🔤 Typing text-based code", value: "python", icon: "🔤" },
+                    { text: "🧩 Dragging and connecting blocks", value: "scratch", icon: "🧩" },
+                    { text: "🎨 Visual interface with no code", value: "n8n", icon: "🎨" },
+                    { text: "📝 Mix of HTML tags and code", value: "web", icon: "📝" }
+                ]
+            },
+            {
+                question: "What's your experience level? 📊",
+                options: [
+                    { text: "👶 Complete beginner, never coded", value: "scratch", icon: "👶" },
+                    { text: "🌱 Beginner, tried a little", value: "karel", icon: "🌱" },
+                    { text: "📚 Some experience, ready to learn more", value: "python", icon: "📚" },
+                    { text: "💪 Comfortable with coding basics", value: "web", icon: "💪" }
+                ]
+            },
+            {
+                question: "What do you want to build first? 🛠️",
+                options: [
+                    { text: "🎲 A dice rolling game", value: "python", icon: "🎲" },
+                    { text: "🌐 My own personal website", value: "web", icon: "🌐" },
+                    { text: "🎪 An animated story or cartoon", value: "scratch", icon: "🎪" },
+                    { text: "🏰 A Roblox game for friends", value: "lua", icon: "🏰" },
+                    { text: "📱 Auto-post to social media", value: "n8n", icon: "📱" },
+                    { text: "🧩 Robot puzzle solutions", value: "karel", icon: "🧩" }
+                ]
+            },
+            {
+                question: "Which do you prefer? 🎯",
+                options: [
+                    { text: "🧠 Logic and problem-solving", value: "python", icon: "🧠" },
+                    { text: "🎨 Creativity and design", value: "web", icon: "🎨" },
+                    { text: "🎮 Game development", value: "lua", icon: "🎮" },
+                    { text: "🤖 Learning programming concepts", value: "karel", icon: "🤖" }
+                ]
+            },
+            {
+                question: "What excites you most? ⚡",
+                options: [
+                    { text: "📊 Working with data and numbers", value: "python", icon: "📊" },
+                    { text: "✨ Creating beautiful visuals", value: "web", icon: "✨" },
+                    { text: "🎬 Making animations", value: "scratch", icon: "🎬" },
+                    { text: "⚙️ Connecting apps together", value: "n8n", icon: "⚙️" }
+                ]
+            },
+            {
+                question: "How do you like to learn? 📖",
+                options: [
+                    { text: "🎯 Step-by-step tutorials", value: "karel", icon: "🎯" },
+                    { text: "🎨 Experimenting and being creative", value: "scratch", icon: "🎨" },
+                    { text: "📚 Reading documentation", value: "python", icon: "📚" },
+                    { text: "🌐 Building real projects", value: "web", icon: "🌐" }
+                ]
+            },
+            {
+                question: "What's your goal? 🎯",
+                options: [
+                    { text: "🏆 Get really good at one language", value: "python", icon: "🏆" },
+                    { text: "🌈 Make creative, visual projects", value: "scratch", icon: "🌈" },
+                    { text: "💼 Build a professional portfolio", value: "web", icon: "💼" },
+                    { text: "🎮 Publish my own game", value: "lua", icon: "🎮" },
+                    { text: "⚡ Make my life easier with automation", value: "n8n", icon: "⚡" }
+                ]
+            },
+            {
+                question: "Pick your superpower! 💪",
+                options: [
+                    { text: "🤖 Automating boring tasks", value: "python", icon: "🤖" },
+                    { text: "🎭 Making things interactive", value: "web", icon: "🎭" },
+                    { text: "🎨 Creating without typing code", value: "scratch", icon: "🎨" },
+                    { text: "🏰 Building virtual worlds", value: "lua", icon: "🏰" },
+                    { text: "🔗 Connecting all my apps", value: "n8n", icon: "🔗" }
+                ]
+            },
+            {
+                question: "What sounds most interesting? 🌟",
+                options: [
+                    { text: "🐍 Python - AI, data science, automation", value: "python", icon: "🐍" },
+                    { text: "🌐 Web Dev - Websites, apps, design", value: "web", icon: "🌐" },
+                    { text: "🌙 Lua - Roblox games, modding", value: "lua", icon: "🌙" },
+                    { text: "🐱 Scratch - Visual coding, animations", value: "scratch", icon: "🐱" },
+                    { text: "🤖 Karel - Programming fundamentals", value: "karel", icon: "🤖" },
+                    { text: "⚡ n8n - Workflow automation", value: "n8n", icon: "⚡" }
+                ]
+            }
+        ];
+
+        let currentQuestion = 0;
+        let quizAnswers = { python: 0, web: 0, lua: 0, scratch: 0, karel: 0, n8n: 0 };
+
+        // SCREEN MANAGEMENT
+        function showScreen(screenId) {
+            const screens = document.querySelectorAll('.screen');
+            screens.forEach(screen => {
+                if (screen.id === screenId) {
+                    screen.classList.remove('exit-left');
+                    screen.classList.add('active');
+                    
+                    // Initialize quiz when showing quiz screen
+                    if (screenId === 'quiz') {
+                        initQuiz();
+                    }
+                    
+                    // Initialize playground when showing it
+                    if (screenId === 'playground') {
+                        runCode();
+                    }
+                } else if (screen.classList.contains('active')) {
+                    screen.classList.remove('active');
+                    screen.classList.add('exit-left');
+                }
+            });
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // QUIZ FUNCTIONS
+        function initQuiz() {
+            currentQuestion = 0;
+            quizAnswers = { python: 0, web: 0, lua: 0, scratch: 0, karel: 0, n8n: 0 };
+            showQuestion();
+        }
+
+        function showQuestion() {
+            if (currentQuestion >= quizQuestions.length) {
+                showQuizResults();
+                return;
+            }
+
+            const question = quizQuestions[currentQuestion];
+            const progress = ((currentQuestion) / quizQuestions.length) * 100;
+            document.getElementById('quizProgress').style.width = progress + '%';
+
+            const quizContent = document.getElementById('quizContent');
+            quizContent.innerHTML = `
+                <div class="quiz-question">
+                    <h2 style="margin-bottom: 1rem; font-size: 1.8rem;">Question ${currentQuestion + 1} of ${quizQuestions.length}</h2>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 2rem;">${question.question}</h3>
+                    <div class="quiz-options">
+                        ${question.options.map((option, index) => `
+                            <div class="quiz-option" onclick="selectAnswer('${option.value}', ${index})">
+                                <span style="font-size: 1.8rem; margin-right: 0.5rem;">${option.icon || option.text.split(' ')[0]}</span>
+                                <span style="font-size: 1.1rem;">${option.text}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectAnswer(value, index) {
+            quizAnswers[value]++;
+            currentQuestion++;
+            setTimeout(showQuestion, 300);
+            
+            // Award quiz badge after completing
+            if (currentQuestion === quizQuestions.length) {
+                unlockBadge('quiz');
+            }
+        }
+
+        function showQuizResults() {
+            document.getElementById('quizProgress').style.width = '100%';
+            
+            // Safety check
+            if (!quizAnswers || typeof quizAnswers !== 'object') {
+                quizAnswers = { python: 0, web: 0, lua: 0, scratch: 0, karel: 0, n8n: 0 };
+            }
+            
+            // Find the language with the most votes
+            let maxScore = 0;
+            let result = 'python';
+            for (let [lang, score] of Object.entries(quizAnswers)) {
+                if (score > maxScore) {
+                    maxScore = score;
+                    result = lang;
+                }
+            }
+            
+            const quizContent = document.getElementById('quizContent');
+            
+            const results = {
+                python: {
+                    icon: '🐍',
+                    title: 'Python is Perfect for You!',
+                    description: 'You love logic, problem-solving, and creating powerful programs! Python is easy to learn, super versatile, and used by professionals everywhere. You can build games, automate tasks, work with AI, and so much more!',
+                    screen: 'python',
+                    color: 'var(--primary)'
+                },
+                web: {
+                    icon: '🌐',
+                    title: 'Web Development is Your Path!',
+                    description: 'You\'re creative and love design! Web development lets you build beautiful, interactive websites that everyone can see and use. Learn HTML, CSS, and JavaScript to bring your creative ideas to life online!',
+                    screen: 'webdev',
+                    color: 'var(--secondary)'
+                },
+                lua: {
+                    icon: '🌙',
+                    title: 'Lua is Made for You!',
+                    description: 'You want to create amazing games in Roblox! Lua is perfect for game development - it\'s fast, simple, and powerful. You can create your own Roblox games and even sell them to earn Robux!',
+                    screen: 'lua',
+                    color: '#9333EA'
+                },
+                scratch: {
+                    icon: '🐱',
+                    title: 'Scratch is Your Perfect Start!',
+                    description: 'You love being creative and want to start easy! Scratch uses drag-and-drop blocks - no typing needed! Create animations, games, and interactive stories. It\'s the perfect way to learn programming concepts while having fun!',
+                    screen: 'scratch',
+                    color: '#FF6680'
+                },
+                karel: {
+                    icon: '🤖',
+                    title: 'Karel is Great for You!',
+                    description: 'You want to understand how programming works! Karel the Robot teaches you fundamental programming concepts by solving puzzles. Learn loops, conditionals, and functions in a fun, visual way before moving to text-based coding!',
+                    screen: 'karel',
+                    color: '#10B981'
+                },
+                n8n: {
+                    icon: '🤖',
+                    title: 'n8n Automation is Perfect!',
+                    description: 'You want to make your life easier! n8n lets you automate tasks without writing code. Connect your apps, create workflows, and let your computer do the boring work for you. It\'s like giving yourself superpowers!',
+                    screen: 'n8n',
+                    color: '#F59E0B'
+                }
+            };
+            
+            const chosen = results[result];
+            
+            quizContent.innerHTML = `
+                <div class="result-card">
+                    <div class="result-icon">${chosen.icon}</div>
+                    <h2 class="result-title" style="color: ${chosen.color};">${chosen.title}</h2>
+                    <p style="font-size: 1.2rem; margin-bottom: 2rem; line-height: 1.8;">${chosen.description}</p>
+                    <div style="margin: 2rem 0; padding: 1.5rem; background: var(--bg-light); border-radius: 20px;">
+                        <h3 style="margin-bottom: 1rem;">Your Quiz Results:</h3>
+                        <div style="display: grid; gap: 0.5rem;">
+                            ${Object.entries(quizAnswers).sort((a, b) => b[1] - a[1]).map(([lang, score]) => `
+                                <div style="display: flex; justify-content: space-between; padding: 0.5rem;">
+                                    <span>${results[lang].icon} ${results[lang].title.split(' ')[0]}</span>
+                                    <span style="font-weight: 700;">${score} points</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="showScreen('${chosen.screen}')" style="background: ${chosen.color};">Start Learning ${results[result].title.split(' ')[0]}! 🚀</button>
+                    <button class="btn btn-secondary" style="margin-left: 1rem;" onclick="initQuiz()">Retake Quiz</button>
+                </div>
+            `;
+        }
+
+        // THEME TOGGLE
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            
+            const toggle = document.querySelector('.theme-toggle');
+            toggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+            
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        if (savedTheme === 'dark') {
+            document.querySelector('.theme-toggle').textContent = '☀️';
+        }
+
+        // CODE PLAYGROUND
+        const codeTemplates = {
+            html: `<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            background: #FFE66D;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to CodeFinder! 🚀</h1>
+    <p>Try editing this code and click Run!</p>
+    <button onclick="alert('You clicked me! 🎉')">Click Me!</button>
+</body>
+</html>`,
+            python: `# Welcome to Python! 🐍
+# Click Run to see the output
+
+# Variables
+name = "CodeFinder"
+age = 10
+
+print("Hello from", name, "!")
+print("I am", age, "years old")
+print()
+
+# Math
+x = 5
+y = 3
+print(x, "+", y, "=", x + y)
+print(x, "*", y, "=", x * y)
+print()
+
+# Lists
+colors = ["red", "blue", "green"]
+print("My favorite colors:", colors)
+
+# Loops
+print("\\nCounting to 5:")
+for i in range(1, 6):
+    print(i, end=" ")
+
+print("\\n\\n✨ Try changing the code above!")`,
+            javascript: `// Welcome to JavaScript! 💛
+// Click Run to see the output
+
+// Variables
+let name = "CodeFinder";
+let score = 100;
+
+console.log("Hello from " + name + "!");
+console.log("Score:", score);
+console.log("");
+
+// Arrays
+let fruits = ["apple", "banana", "orange"];
+console.log("Fruits:", fruits);
+
+// Loops
+console.log("\\nCounting to 5:");
+for (let i = 1; i <= 5; i++) {
+    console.log(i);
+}
+
+// Functions
+function greet(person) {
+    return "Hi, " + person + "! 👋";
+}
+
+console.log("\\n" + greet("friend"));
+
+console.log("\\n✨ Try changing the code above!");`,
+            lua: `-- Welcome to Lua! 🌙
+-- Click Run to see the output
+
+-- Variables
+local name = "CodeFinder"
+local level = 10
+
+print("Hello from " .. name .. "!")
+print("Level: " .. level)
+print("")
+
+-- Math
+local x = 5
+local y = 3
+print(x .. " + " .. y .. " = " .. (x + y))
+print(x .. " * " .. y .. " = " .. (x * y))
+print("")
+
+-- Tables (like lists)
+local colors = {"red", "blue", "green"}
+print("My colors:")
+for i, color in ipairs(colors) do
+    print(i .. ". " .. color)
+end
+
+-- Loops
+print("\\nCounting to 5:")
+for i = 1, 5 do
+    print(i)
+end
+
+print("\\n✨ Try changing the code above!")
+print("\\nNote: This is simulated Lua output")
+print("For real Roblox Lua, use Roblox Studio!")`
+        };
+
+        let currentLanguage = 'html';
+
+        function changeLanguage() {
+            const selector = document.getElementById('languageSelector');
+            currentLanguage = selector.value;
+            
+            document.getElementById('codeInput').value = codeTemplates[currentLanguage];
+            document.getElementById('editorTitle').textContent = `✏️ Code Editor - ${getLanguageName(currentLanguage)}`;
+            
+            // Update tips
+            updatePlaygroundTips(currentLanguage);
+            
+            // Clear output
+            clearOutput();
+        }
+
+        function getLanguageName(lang) {
+            const names = {
+                'html': 'HTML/CSS/JS',
+                'python': 'Python',
+                'javascript': 'JavaScript',
+                'lua': 'Lua'
+            };
+            return names[lang] || lang;
+        }
+
+        function updatePlaygroundTips(lang) {
+            const tips = {
+                html: [
+                    '✨ Edit the code and click "Run" to see what happens!',
+                    '🎨 Try changing colors, text, or the button message',
+                    '🚀 Add more HTML tags like <h2>, <p>, or <img>'
+                ],
+                python: [
+                    '🐍 Python uses indentation (spaces) to organize code',
+                    '✨ Try changing the numbers or adding your own variables',
+                    '🎮 Create a simple game with if statements!'
+                ],
+                javascript: [
+                    '💛 JavaScript makes websites interactive!',
+                    '✨ Try console.log() to print different messages',
+                    '🔧 Create your own functions and call them'
+                ],
+                lua: [
+                    '🌙 Lua is perfect for Roblox game development!',
+                    '✨ Practice here, then try it in Roblox Studio',
+                    '🎮 Learn the basics before making your game'
+                ]
+            };
+            
+            const tipsList = document.getElementById('playgroundTips');
+            tipsList.innerHTML = tips[lang].map(tip => `<li style="padding: 0.5rem 0;">${tip}</li>`).join('');
+        }
+
+        function clearOutput() {
+            document.getElementById('output').textContent = '';
+            const iframe = document.getElementById('previewFrame');
+            iframe.style.display = 'none';
+        }
+
+        function runCode() {
+            const code = document.getElementById('codeInput').value;
+            const output = document.getElementById('output');
+            const iframe = document.getElementById('previewFrame');
+            
+            clearOutput();
+            
+            if (currentLanguage === 'html') {
+                // Run HTML code in iframe
+                iframe.style.display = 'block';
+                output.style.display = 'none';
+                const previewDoc = iframe.contentDocument || iframe.contentWindow.document;
+                previewDoc.open();
+                previewDoc.write(code);
+                previewDoc.close();
+            } else {
+                // Run other languages (simulated)
+                iframe.style.display = 'none';
+                output.style.display = 'block';
+                
+                try {
+                    if (currentLanguage === 'python') {
+                        // Simulate Python execution
+                        output.textContent = simulatePython(code);
+                    } else if (currentLanguage === 'javascript') {
+                        // Execute JavaScript safely
+                        output.textContent = executeJavaScript(code);
+                    } else if (currentLanguage === 'lua') {
+                        // Simulate Lua execution
+                        output.textContent = simulateLua(code);
+                    }
+                } catch (error) {
+                    output.textContent = '❌ Error: ' + error.message;
+                    output.style.color = '#EF4444';
+                }
+            }
+        }
+
+        function simulatePython(code) {
+            let output = '';
+            
+            try {
+                // Simple Python simulator
+                const lines = code.split('\n');
+                const variables = {};
+                let i = 0;
+                
+                while (i < lines.length) {
+                    let line = lines[i].trim();
+                    i++;
+                    
+                    // Skip comments and empty lines
+                    if (line.startsWith('#') || line === '') continue;
+                    
+                    // Handle print statements
+                    if (line.includes('print(')) {
+                        try {
+                            // Extract content between print( and )
+                            let startIdx = line.indexOf('print(') + 6;
+                            let endIdx = line.lastIndexOf(')');
+                            let content = line.substring(startIdx, endIdx);
+                            
+                            // Handle empty print()
+                            if (content === '') {
+                                output += '\n';
+                                continue;
+                            }
+                            
+                            // Split by comma to handle multiple arguments
+                            let parts = content.split(',').map(p => p.trim());
+                            let result = [];
+                            
+                            for (let part of parts) {
+                                // Check if it's a string (has quotes)
+                                if (part.startsWith('"') || part.startsWith("'")) {
+                                    result.push(part.replace(/['"]/g, ''));
+                                }
+                                // Check if it's a variable
+                                else if (variables[part] !== undefined) {
+                                    result.push(variables[part]);
+                                }
+                                // Check for simple math expressions
+                                else if (part.includes('+') || part.includes('-') || part.includes('*') || part.includes('/')) {
+                                    // Replace variables in expression
+                                    let expr = part;
+                                    for (let [key, value] of Object.entries(variables)) {
+                                        expr = expr.replace(new RegExp('\\b' + key + '\\b', 'g'), value);
+                                    }
+                                    try {
+                                        result.push(eval(expr));
+                                    } catch {
+                                        result.push(expr);
+                                    }
+                                }
+                                // Otherwise try to evaluate it
+                                else {
+                                    try {
+                                        result.push(eval(part));
+                                    } catch {
+                                        result.push(part);
+                                    }
+                                }
+                            }
+                            
+                            output += result.join(' ') + '\n';
+                        } catch (e) {
+                            output += '⚠️ Error in print statement\n';
+                        }
+                    }
+                    
+                    // Handle variable assignments
+                    else if (line.includes('=') && !line.includes('==') && !line.includes('<=') && !line.includes('>=')) {
+                        try {
+                            let parts = line.split('=');
+                            if (parts.length === 2) {
+                                let varName = parts[0].trim();
+                                let value = parts[1].trim();
+                                
+                                // Remove quotes from strings
+                                if (value.startsWith('"') || value.startsWith("'")) {
+                                    variables[varName] = value.replace(/['"]/g, '');
+                                } else {
+                                    // Try to evaluate as number
+                                    try {
+                                        variables[varName] = eval(value);
+                                    } catch {
+                                        variables[varName] = value;
+                                    }
+                                }
+                            }
+                        } catch (e) {
+                            // Skip problematic assignments
+                        }
+                    }
+                    
+                    // Handle for loops (simple version)
+                    else if (line.startsWith('for ')) {
+                        try {
+                            let match = line.match(/for\s+(\w+)\s+in\s+range\((\d+)(?:,\s*(\d+))?\)/);
+                            if (match) {
+                                let varName = match[1];
+                                let start = match[3] ? parseInt(match[2]) : 0;
+                                let end = match[3] ? parseInt(match[3]) : parseInt(match[2]);
+                                
+                                for (let j = start; j < end; j++) {
+                                    variables[varName] = j;
+                                }
+                            }
+                        } catch (e) {
+                            // Skip problematic loops
+                        }
+                    }
+                }
+                
+                return output || '✅ Code executed! (Python simulation)';
+            } catch (error) {
+                return '❌ Error: ' + error.message + '\n\nNote: This is a simplified Python simulator.\nFor full Python features, use a real Python environment!';
+            }
+        }
+
+        function executeJavaScript(code) {
+            let output = '';
+            
+            // Capture console.log
+            const originalLog = console.log;
+            console.log = function(...args) {
+                output += args.join(' ') + '\n';
+            };
+            
+            try {
+                eval(code);
+            } catch (error) {
+                output += '❌ Error: ' + error.message;
+            }
+            
+            // Restore console.log
+            console.log = originalLog;
+            
+            return output || '✅ Code executed successfully!';
+        }
+
+        function simulateLua(code) {
+            let output = '';
+            
+            // Simple Lua simulator
+            const lines = code.split('\n');
+            
+            for (let line of lines) {
+                line = line.trim();
+                
+                // Skip comments and empty lines
+                if (line.startsWith('--') || line === '') continue;
+                
+                // Handle print statements
+                if (line.includes('print(')) {
+                    let match = line.match(/print\((.*)\)/);
+                    if (match) {
+                        let content = match[1];
+                        // Remove quotes and concatenation
+                        content = content.replace(/"/g, '').replace(/\.\./g, '').replace(/'/g, '');
+                        output += content + '\n';
+                    }
+                }
+            }
+            
+            return output || '✅ Code executed! (Lua simulation)\n\nNote: For real Lua/Roblox development,\nuse Roblox Studio!';
+        }
+
+        // Initialize playground
+        function initPlayground() {
+            changeLanguage(); // Load initial template
+        }
+
+        // PROGRESS TRACKING
+        let progress = {
+            python: { level1: 0, level2: 0, level3: 0 },
+            webdev: { level1: 0, level2: 0, level3: 0 },
+            lua: { level1: 0, level2: 0, level3: 0 },
+            n8n: { level1: 0, level2: 0, level3: 0 },
+            scratch: { level1: 0, level2: 0, level3: 0 },
+            karel: { level1: 0, level2: 0, level3: 0 },
+            lessonsCompleted: 0,
+            projectsBuilt: 0,
+            codingStreak: 1
+        };
+
+        // Load progress from localStorage
+        const savedProgress = localStorage.getItem('progress');
+        if (savedProgress) {
+            try {
+                const loaded = JSON.parse(savedProgress);
+                // Merge with defaults to ensure all paths exist
+                progress = {
+                    python: loaded.python || { level1: 0, level2: 0, level3: 0 },
+                    webdev: loaded.webdev || { level1: 0, level2: 0, level3: 0 },
+                    lua: loaded.lua || { level1: 0, level2: 0, level3: 0 },
+                    n8n: loaded.n8n || { level1: 0, level2: 0, level3: 0 },
+                    scratch: loaded.scratch || { level1: 0, level2: 0, level3: 0 },
+                    karel: loaded.karel || { level1: 0, level2: 0, level3: 0 },
+                    lessonsCompleted: loaded.lessonsCompleted || 0,
+                    projectsBuilt: loaded.projectsBuilt || 0,
+                    codingStreak: loaded.codingStreak || 1
+                };
+            } catch (e) {
+                console.error('Error loading progress:', e);
+            }
+            updateProgressDisplay();
+        }
+
+        function markComplete(path, level) {
+            const levelKey = `level${level}`;
+            const topics = document.querySelectorAll(`#${path} .level:nth-child(${level}) .topic-list li`);
+            
+            // Safety check
+            if (!progress[path]) {
+                progress[path] = { level1: 0, level2: 0, level3: 0 };
+            }
+            
+            if (progress[path][levelKey] < 100) {
+                progress[path][levelKey] = Math.min(100, progress[path][levelKey] + (100 / topics.length));
+                progress.lessonsCompleted++;
+                
+                updateProgressDisplay();
+                saveProgress();
+                
+                // Check for badge unlocks
+                if (progress[path][levelKey] >= 100) {
+                    unlockBadge(path);
+                }
+            }
+        }
+
+        function updateProgressDisplay() {
+            // Update level progress for all paths
+            ['python', 'webdev', 'lua', 'n8n', 'scratch', 'karel'].forEach(path => {
+                // Safety check
+                if (!progress[path]) {
+                    progress[path] = { level1: 0, level2: 0, level3: 0 };
+                }
+                
+                Object.keys(progress[path]).forEach(level => {
+                    const elem = document.getElementById(`${path}-${level}`);
+                    if (elem) elem.textContent = Math.round(progress[path][level]) + '% Complete';
+                });
+            });
+            
+            // Calculate overall progress for each path
+            const pythonTotal = (progress.python.level1 + progress.python.level2 + progress.python.level3) / 3;
+            const webdevTotal = (progress.webdev.level1 + progress.webdev.level2 + progress.webdev.level3) / 3;
+            const luaTotal = (progress.lua.level1 + progress.lua.level2 + progress.lua.level3) / 3;
+            const n8nTotal = (progress.n8n.level1 + progress.n8n.level2 + progress.n8n.level3) / 3;
+            const scratchTotal = (progress.scratch.level1 + progress.scratch.level2 + progress.scratch.level3) / 3;
+            const karelTotal = (progress.karel.level1 + progress.karel.level2 + progress.karel.level3) / 3;
+            
+            // Update main progress bars
+            const progressBars = {
+                'pythonProgress': pythonTotal,
+                'webdevProgress': webdevTotal,
+                'luaProgress': luaTotal,
+                'n8nProgress': n8nTotal,
+                'scratchProgress': scratchTotal,
+                'karelProgress': karelTotal
+            };
+            
+            Object.entries(progressBars).forEach(([id, value]) => {
+                const elem = document.getElementById(id);
+                const percentElem = document.getElementById(id.replace('Progress', 'Percent'));
+                if (elem) {
+                    elem.style.width = value + '%';
+                    if (percentElem) percentElem.textContent = Math.round(value) + '% Complete';
+                }
+            });
+            
+            // Update stats
+            document.getElementById('lessonsCompleted').textContent = progress.lessonsCompleted;
+            document.getElementById('projectsBuilt').textContent = progress.projectsBuilt;
+            document.getElementById('codingStreak').textContent = progress.codingStreak;
+            
+            // Count unlocked badges
+            const unlockedBadges = document.querySelectorAll('.badge:not(.locked)').length;
+            document.getElementById('totalBadges').textContent = unlockedBadges;
+        }
+
+        function saveProgress() {
+            localStorage.setItem('progress', JSON.stringify(progress));
+        }
+
+        function unlockBadge(badgeType) {
+            const badge = document.getElementById(`badge-${badgeType}`);
+            if (badge && badge.classList.contains('locked')) {
+                badge.classList.remove('locked');
+                setTimeout(() => {
+                    showNotification(`🎉 New Badge Unlocked!`);
+                }, 500);
+            }
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: linear-gradient(135deg, var(--primary), var(--secondary));
+                color: white;
+                padding: 1.5rem 2rem;
+                border-radius: 20px;
+                box-shadow: 0 10px 40px var(--shadow);
+                z-index: 10000;
+                font-weight: 600;
+                font-size: 1.1rem;
+                animation: slideInRight 0.5s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.5s ease';
+                setTimeout(() => notification.remove(), 500);
+            }, 3000);
+        }
+
+        // LANGUAGE SUGGESTIONS
+        function showLanguageSuggestion() {
+            showScreen('suggestions');
+        }
+
+        function submitSuggestions() {
+            // Collect known languages
+            const knownLanguages = [];
+            ['python', 'javascript', 'lua', 'java', 'csharp', 'scratch', 'other'].forEach(lang => {
+                const elem = document.getElementById(`know-${lang}`);
+                if (elem && elem.checked) {
+                    knownLanguages.push(lang);
+                }
+            });
+
+            // Collect wanted languages
+            const wantedLanguages = [];
+            ['java', 'csharp', 'scratch', 'cpp', 'rust', 'go', 'swift', 'kotlin'].forEach(lang => {
+                const elem = document.getElementById(`want-${lang}`);
+                if (elem && elem.checked) {
+                    wantedLanguages.push(lang);
+                }
+            });
+
+            // Get other suggestions
+            const otherSuggestions = document.getElementById('otherSuggestions').value;
+
+            // In a real app, this would send to a server
+            // For now, we'll save to localStorage and show confirmation
+            const suggestions = {
+                knownLanguages,
+                wantedLanguages,
+                otherSuggestions,
+                timestamp: new Date().toISOString()
+            };
+
+            localStorage.setItem('userSuggestions', JSON.stringify(suggestions));
+
+            // Show success message
+            showNotification('🎉 Thanks for your suggestions!');
+            
+            // Unlock creative badge for participating
+            setTimeout(() => {
+                unlockBadge('creative');
+            }, 1000);
+
+            // Clear form after 2 seconds
+            setTimeout(() => {
+                document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+                document.getElementById('otherSuggestions').value = '';
+                showScreen('home');
+            }, 2000);
+        }
+
+        // Initialize on load
+        updateProgressDisplay();
+        
+        // Unlock starter badge on first visit
+        setTimeout(() => {
+            unlockBadge('starter');
+        }, 1000);
+        
+        // Initialize playground when it's first shown
+        setTimeout(() => {
+            initPlayground();
+        }, 500);
+    </script>
+</body>
+</html>
