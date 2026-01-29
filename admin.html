@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<body style="font-family: sans-serif; padding: 20px; max-width: 600px; margin: auto;">
+  <h2>Admin Panel</h2>
+  
+  <div style="background: #eee; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+    <input type="password" id="pass" placeholder="Enter Admin Password" style="width:100%; padding:8px; margin-bottom:10px;"><br>
+    <hr>
+    <h3>Add New Item</h3>
+    <input type="text" id="name" placeholder="Name" style="width:100%; padding:8px; margin-bottom:10px;"><br>
+    <textarea id="desc" placeholder="Description" style="width:100%; padding:8px; margin-bottom:10px;"></textarea><br>
+    <button onclick="saveData()" style="background: #0070f3; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Add to Database</button>
+  </div>
+
+  <h3>Current Database Entries</h3>
+  <div id="list">Loading...</div>
+
+  <script>
+    const API_URL = 'https://db.codefindercoaching.workers.dev'; 
+
+    async function loadData() {
+      const res = await fetch(API_URL);
+      const data = await res.json();
+      document.getElementById('list').innerHTML = data.map(item => `
+        <div style="border-bottom: 1px solid #ccc; padding: 10px; display: flex; justify-content: space-between;">
+          <div><strong>${item.item_name}</strong><br><small>${item.description}</small></div>
+          <button onclick="deleteItem(${item.id})" style="background: #ff4d4d; color: white; border: none; padding: 5px; border-radius: 4px; cursor: pointer;">Delete</button>
+        </div>
+      `).join('');
+    }
+
+    async function saveData() {
+      const password = document.getElementById('pass').value;
+      const item_name = document.getElementById('name').value;
+      const description = document.getElementById('desc').value;
+
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': password },
+        body: JSON.stringify({ item_name, description })
+      });
+
+      if (res.status === 401) alert("Wrong Password!");
+      else location.reload();
+    }
+
+    async function deleteItem(id) {
+      const password = document.getElementById('pass').value;
+      if(!password) return alert("Enter password first!");
+      
+      if(confirm('Delete this item?')) {
+        const res = await fetch(API_URL, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json', 'Authorization': password },
+          body: JSON.stringify({ id })
+        });
+        if (res.status === 401) alert("Wrong Password!");
+        else loadData();
+      }
+    }
+
+    loadData();
+  </script>
+</body>
+</html>
